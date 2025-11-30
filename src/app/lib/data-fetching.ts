@@ -29,7 +29,7 @@ export async function getPaperById(id: string): Promise<QuestionPaper | null> {
     console.log(
       "[papers:get] <- status:",
       response.status,
-      `${Date.now() - startedAt}ms`
+      `${Date.now() - startedAt}ms`,
     );
 
     if (!response.ok) {
@@ -55,7 +55,7 @@ export async function getPaperById(id: string): Promise<QuestionPaper | null> {
     console.log(
       "[papers:get] ok id/courseTitle:",
       data?.id,
-      data?.course?.title
+      data?.course?.title,
     );
     return data;
   } catch (err) {
