@@ -16,6 +16,13 @@ jobs:
         uses: pnpm/action-setup@v4
       - name: Install Dependencies
         run: pnpm install
+      - name: Setup ENVs
+        shell: pwsh
+        run: |
+          ## Decode env file content from secret and save to .env.local
+          $envContent = "${{ secrets.ENV_PR }}"
+          $decodedContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($envContent))
+          $decodedContent | Out-File -FilePath ".env.local" -Encoding UTF8
       - name: Build Project
         run: pnpm build
       - name: Deploy to Firebase Hosting Live Channel
