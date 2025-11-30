@@ -20,8 +20,19 @@ jobs:
         run: pnpm install
       - name: Build Project
         run: pnpm build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Deploy to Firebase Hosting Preview Channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        id: hosting-preview
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BRAINBOOST_99183 }}
           projectId: brainboost-99183
+      - name: Comment Preview URL
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          header: "Firebase Hosting Preview URL"
+          message: |
+            Your changes have been deployed to a Firebase Hosting preview channel! 🎉
+
+            🔗 [Preview your changes here](${{ steps.hosting-preview.outputs.details_url }})
