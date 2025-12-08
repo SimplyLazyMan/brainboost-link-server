@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  distDir: "build",
+  // distDir: "build",
   images: {
     domains: ["cdn.mybrainboostapp.com", "cdn-staging.mybrainboostapp.com"],
   },
