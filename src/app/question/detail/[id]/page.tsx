@@ -3,9 +3,19 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { getPaperById } from "../../../lib/data-fetching";
 import { AppLinksAndroid } from "next/dist/lib/metadata/types/extra-types";
+import OpenAppButton from "./OpenAppButton";
 
 interface ResourcePageProps {
   params: Promise<{ id: string }>;
+}
+
+function getDomainFromUrl(url: string): string | null {
+  try {
+    const parsedUrl = new URL(url);
+    return `https://${parsedUrl.hostname}`;
+  } catch {
+    return null;
+  }
 }
 
 // Helper to format enum strings like "FIRST_SEMESTER" -> "First Semester"
@@ -79,7 +89,7 @@ export async function generateMetadata({
       siteName: "BrainBoost",
       locale: "en_US",
       type: "website",
-      url: `${process.env.FALLBACK_URL}/question/details/${resource.id}`,
+      url: `${process.env.FALLBACK_URL}/question/detail/${resource.id}`,
       images: [
         {
           url: imageUrl,
@@ -93,10 +103,10 @@ export async function generateMetadata({
       android: {
         package: process.env.APP_PACKAGE_NAME,
         app_name: "BrainBoost",
-        url: `${process.env.DEEP_LINK_URL}/question/details/${resource.id}`,
+        url: `${process.env.DEEP_LINK_URL}/question/detail/${resource.id}`,
       } as AppLinksAndroid,
       web: {
-        url: `${process.env.FALLBACK_URL}/question/details/${resource.id}`,
+        url: `${process.env.FALLBACK_URL}/question/detail/${resource.id}`,
         should_fallback: true,
       },
     },
@@ -114,7 +124,7 @@ export async function generateMetadata({
       },
     },
     alternates: {
-      canonical: `${process.env.FALLBACK_URL}/question/details/${resource.id}`,
+      canonical: `${process.env.FALLBACK_URL}/question/detail/${resource.id}`,
     },
     twitter: {
       card: "summary_large_image",
@@ -164,7 +174,7 @@ export async function generateMetadata({
   };
 }
 
-// Page component that displays resource details
+// Page component that displays resource detail
 export default async function ResourcePage({ params }: ResourcePageProps) {
   const { id } = await params;
   const resource = await getPaperById(id);
@@ -194,11 +204,11 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     datePublished: resource.createdAt,
     inLanguage: "en",
     fileFormat: "application/pdf",
-    url: `${process.env.FALLBACK_URL}/question/details/${resource.id}`,
+    url: `${process.env.FALLBACK_URL}/question/detail/${resource.id}`,
     provider: {
       "@type": "Organization",
       name: "BrainBoost",
-      url: process.env.FALLBACK_URL,
+      url: getDomainFromUrl(process.env.FALLBACK_URL!),
       logo: process.env.LOGO_ICON_URL,
     },
     ...(resource.solutionPrice && {
@@ -226,6 +236,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
               src={resource.thumbnail}
               alt={title}
               fill
+              priority
               className="object-cover object-top"
               sizes="(max-width: 768px) 100vw, 450px"
             />
@@ -235,6 +246,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                 src={process.env.LOGO_ICON_URL!}
                 alt={title}
                 fill
+                priority
                 className="object-contain opacity-20"
                 sizes="(max-width: 768px) 100vw, 450px"
               />
@@ -294,12 +306,12 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
             <p className="text-xs text-gray-400 mb-2">
               Open in BrainBoost App to view full content
             </p>
-            <a
-              href={`brainboost://question/details/${resource.id}`}
-              className="block w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors text-center"
-            >
-              Open in App
-            </a>
+            <OpenAppButton
+              resourceId={resource.id}
+              packageName={process.env.APP_PACKAGE_NAME!}
+              scheme={(process.env.APP_PACKAGE_NAME!.split(".").pop() || "brainboost").toLowerCase()}
+              fallbackUrl={`${process.env.FALLBACK_URL}/question/detail/${resource.id}`}
+            />
           </div>
         </div>
       </div>
