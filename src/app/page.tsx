@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Home() {
   const logoUrl = process.env.LOGO_ICON_URL;
   const fallbackUrl = process.env.FALLBACK_URL || "#";
-  const deepLinkUrl = `${process.env.DEEP_LINK_URL}` || "brainboost://";
+  const deepLinkUrl = `${process.env.DEEP_LINK_URL}/` || "brainboost://";
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
