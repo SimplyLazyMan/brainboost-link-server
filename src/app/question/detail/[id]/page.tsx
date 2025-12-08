@@ -144,7 +144,7 @@ export async function generateMetadata({
     authors: [
       {
         name: "BrainBoost",
-        url: process.env.FALLBACK_URL,
+        url: getDomainFromUrl(process.env.FALLBACK_URL!) || undefined,
       },
     ],
     creator: "BrainBoost",
