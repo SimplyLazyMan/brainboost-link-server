@@ -1,0 +1,37 @@
+name: Deploy to Cloudflare Workers
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
+      - name: Setup ENVs
+        shell: pwsh
+        run: |
+          ## Decode env file content from secret and save to .env.local
+          $envContent = "${{ secrets.ENV_PR }}"
+          $decodedContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($envContent))
+          $decodedContent | Out-File -FilePath ".env.local" -Encoding UTF8
+      - name: Build Project
+        run: pnpm build
+
+      - name: Deploy to Cloudflare
+        run: pnpm run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
