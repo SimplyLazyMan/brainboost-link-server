@@ -264,7 +264,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
             <div className="flex justify-between border-b border-gray-100 pb-2">
               <span>Faculty</span>
               <span className="font-medium text-gray-900 text-right">
-                {resource.faculty.abbreviation}
+                {resource.faculty.name} ({resource.faculty.abbreviation})
               </span>
             </div>
             <div className="flex justify-between border-b border-gray-100 pb-2">
