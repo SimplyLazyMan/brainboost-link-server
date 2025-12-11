@@ -1,4 +1,4 @@
-import { QuestionPaper, ApiResponse } from "../util/type";
+import type { ApiResponse, QuestionPaper } from "../util/type";
 
 // Fetch resource details from the staging API
 export async function getPaperById(id: string): Promise<QuestionPaper | null> {

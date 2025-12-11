@@ -8,7 +8,7 @@ export default function NotFound() {
         <div className="relative aspect-video w-full bg-gray-200">
           <div className="flex items-center justify-center h-full text-gray-400 relative">
             <Image
-              src={process.env.LOGO_ICON_URL!}
+              src={process.env.LOGO_ICON_URL || ""}
               alt="BrainBoost"
               fill
               className="object-contain opacity-20"

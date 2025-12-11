@@ -1,8 +1,8 @@
-import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import type { AppLinksAndroid } from "next/dist/lib/metadata/types/extra-types";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 import { getPaperById } from "../../../lib/data-fetching";
-import { AppLinksAndroid } from "next/dist/lib/metadata/types/extra-types";
 import OpenAppButton from "./OpenAppButton";
 
 interface ResourcePageProps {
@@ -60,7 +60,7 @@ export async function generateMetadata({
     resource.hasSolution ? " Solution available." : ""
   } Access on BrainBoost.`;
 
-  const imageUrl = resource.thumbnail || process.env.LOGO_ICON_URL!;
+  const imageUrl = resource.thumbnail || process.env.LOGO_ICON_URL || "";
 
   return {
     title: {
@@ -144,7 +144,7 @@ export async function generateMetadata({
     authors: [
       {
         name: "BrainBoost",
-        url: getDomainFromUrl(process.env.FALLBACK_URL!) || undefined,
+        url: getDomainFromUrl(process.env.FALLBACK_URL || "") || undefined,
       },
     ],
     creator: "BrainBoost",
@@ -154,7 +154,7 @@ export async function generateMetadata({
       address: false,
       telephone: false,
     },
-    metadataBase: new URL(process.env.FALLBACK_URL!),
+    metadataBase: new URL(process.env.FALLBACK_URL || "https://example.com"),
     appleWebApp: {
       title: "BrainBoost",
       statusBarStyle: "black-translucent",
@@ -190,7 +190,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
   const type = formatEnumString(resource.courseType);
   const description = `${type} • ${level} • ${semester} • ${resource.academicYear}`;
 
-  const imageUrl = resource.thumbnail || process.env.LOGO_ICON_URL!;
+  const imageUrl = resource.thumbnail || process.env.LOGO_ICON_URL || "";
 
   // JSON-LD Structured Data for SEO (Client-side injection)
   const jsonLd = {
@@ -208,7 +208,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     provider: {
       "@type": "Organization",
       name: "BrainBoost",
-      url: getDomainFromUrl(process.env.FALLBACK_URL!),
+      url: getDomainFromUrl(process.env.FALLBACK_URL || ""),
       logo: process.env.LOGO_ICON_URL,
     },
     ...(resource.solutionPrice && {
@@ -225,6 +225,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-50 text-gray-900">
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD injection
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
@@ -243,7 +244,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
           ) : (
             <div className="flex items-center justify-center h-full text-gray-400 relative">
               <Image
-                src={process.env.LOGO_ICON_URL!}
+                src={process.env.LOGO_ICON_URL || ""}
                 alt={title}
                 fill
                 priority
@@ -308,8 +309,11 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
             </p>
             <OpenAppButton
               resourceId={resource.id}
-              packageName={process.env.APP_PACKAGE_NAME!}
-              scheme={(process.env.APP_PACKAGE_NAME!.split(".").pop() || "brainboost").toLowerCase()}
+              packageName={process.env.APP_PACKAGE_NAME || ""}
+              scheme={(
+                (process.env.APP_PACKAGE_NAME || "").split(".").pop() ||
+                "brainboost"
+              ).toLowerCase()}
               fallbackUrl={`${process.env.FALLBACK_URL}/question/detail/${resource.id}`}
             />
           </div>
