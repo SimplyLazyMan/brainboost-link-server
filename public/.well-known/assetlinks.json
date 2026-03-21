@@ -13,6 +13,26 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
+      "package_name": "com.mybrainboostapp.dev",
+      "sha256_cert_fingerprints": [
+        "A4:B3:00:EC:B3:3C:78:7E:34:61:16:E4:5F:44:6B:08:07:C8:59:21:DC:75:69:66:A5:49:FC:7D:39:E8:B4:4E"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.mybrainboostapp.stg",
+      "sha256_cert_fingerprints": [
+        "A4:B3:00:EC:B3:3C:78:7E:34:61:16:E4:5F:44:6B:08:07:C8:59:21:DC:75:69:66:A5:49:FC:7D:39:E8:B4:4E"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
       "package_name": "com.mybrainboostapp",
       "sha256_cert_fingerprints": [
         "A1:1F:C0:A8:88:07:C7:2F:17:1E:3E:00:E1:63:38:77:11:D0:10:F4:CE:E3:3C:C2:29:01:FA:6A:E1:78:52:C8"
